@@ -35,14 +35,14 @@ screen = pygame.display.set_mode((400,600))
 screen.fill(White)
 pygame.display.set_caption("Game")
 
-#Появление врагов
+#Class of enemy
 class Enemy(pygame.sprite.Sprite):
       def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("Enemy.png")
         self.rect = self.image.get_rect()
         self.rect.center = (random.randint(40, Widht-40), 0)  
- 
+        #function of movement of enemy
       def move(self):
         global score
         self.rect.move_ip(0,speed)
@@ -51,21 +51,21 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.top = 0
             self.rect.center = (random.randint(40, Widht - 40), 0)
 
-# Появление монет           
+# Class of money          
 class Coin(pygame.sprite.Sprite):
       def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("coin.png")
         self.rect = self.image.get_rect()
         self.rect.center = (random.randint(40, Widht-40), 0)  
- 
+        #function of movement of money
       def move(self):
         global score
         self.rect.move_ip(0,speed)
         if (self.rect.top > 600):
             self.rect.top = 0
             self.rect.center = (random.randint(40, Widht - 40), 0)      
-# Появление новой монеты
+# Class of another type of money
 class Blackcoin(pygame.sprite.Sprite):
       def __init__(self):
         super().__init__() 
@@ -81,7 +81,7 @@ class Blackcoin(pygame.sprite.Sprite):
             self.rect.center = (random.randint(40, Widht - 40), 0) 
 
  
-#УПравление игркоом
+#Управление игркоом
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
@@ -91,10 +91,10 @@ class Player(pygame.sprite.Sprite):
         
     def move(self):
         pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[K_UP]:
-            self.rect.move_ip(0, -5)
-        if pressed_keys[K_DOWN]:
-            self.rect.move_ip(0,5)
+        #if pressed_keys[K_UP]:
+         #   self.rect.move_ip(0, -5)
+        #if pressed_keys[K_DOWN]:
+         #   self.rect.move_ip(0,5)
          
         if self.rect.left >= 30:
               if pressed_keys[K_LEFT]:
