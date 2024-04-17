@@ -19,10 +19,10 @@ def handler():
         if event.type == pygame.QUIT:
             return False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_n:
+            if event.key == pygame.K_RIGHT:
                     current = (current + 1) % len(playlist)
                     start_playing(playlist, current)
-            elif event.key == pygame.K_p:
+            elif event.key == pygame.K_LEFT:
                     current = (current - 1) % len(playlist)
                     start_playing(playlist, current)    
             elif event.key == pygame.K_SPACE:

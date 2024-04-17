@@ -22,8 +22,8 @@ Collected_coins = 0
 font = pygame.font.SysFont("Verdana", 60)
 font_small = pygame.font.SysFont("Verdana", 20)
 game_over = font.render("Game Over", True, BLACK)
-good = font.render("Good", True, BLACK)
-bad = font.render("Bad", True, BLACK)
+#good = font.render("Good", True, BLACK)
+#bad = font.render("Bad", True, BLACK)
 background = pygame.image.load("AnimatedStreet.png")
 
 display = pygame.display.set_mode((400,600))
