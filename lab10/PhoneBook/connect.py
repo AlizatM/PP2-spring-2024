@@ -11,7 +11,7 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 def hello():
-    print("What you want?(1 - Insert, 2 - Update, 3 - Delete, 4 - Query):")
+    print("user_command you want?(1 - Insert, 2 - Update, 3 - Delete, 4 - Query):")
     way = input()
     if way == "1":
         return "C"
@@ -67,9 +67,9 @@ def query():
         condition = None
     if condition:
         if select == "1":
-            sql = f'''SELECT * phonebook WHERE Full_Name LIKE '{condition}';'''
+            sql = f'''SELECT * From phonebook WHERE Full_Name LIKE '{condition}';'''
         elif select == "2":
-            sql = f'''SELECT * phonebook WHERE Phone_Number LIKE '{condition}';'''
+            sql = f'''SELECT * From phonebook WHERE Phone_Number LIKE '{condition}';'''
         else:
             sql = f'''SELECT * FROM phonebook WHERE {condition};'''
     else:
@@ -84,19 +84,19 @@ def query():
     for row in answer:
         print(row)
 
-what = hello()
+user_command = hello()
 
-if what == "C":
+if user_command == "C":
     insert()
-elif what == "D":
+elif user_command == "D":
     delete()
-elif what == "U":
+elif user_command == "U":
     update()
-elif what == "Q":
+elif user_command == "Q":
     query()
 
 conn.commit()
-print("Succes!")
+print("Success!")
 
 
 cursor.close()

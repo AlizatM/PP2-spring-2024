@@ -1,17 +1,17 @@
 import psycopg2
-import csv
 from psycopg2 import Error
 
+pattern = ""
 connection = psycopg2.connect(user="postgres",
                                   password="170206",
-                                  host="127.0.0.1",
+                                  host="localhost",
                                   port="5432",
                                   database="postgres")
 
 cursor = connection.cursor()
 
-def hello():
-    print("What you want?(1 - Insert, 2 - Update, 3 - Delete, 4 - Query):")
+def user_command():
+    print("What command you want?(1 - Insert, 2 - Update, 3 - Delete, 4 - Query, 5 - Pattern, 6 - Pagination):")
     way = input()
     if way == "1":
         return "C"
@@ -21,19 +21,55 @@ def hello():
         return "D"
     elif way == "4":
         return "Q"
+    elif way == "5":
+        global pattern
+        print("What's pattern?")
+        pattern = input()
+        return "P"
+    elif way == "6":
+        return "PA"
 
+def find_by_pattern(pattern):
+    cursor.execute("""
+            SELECT * FROM phonebook 
+            WHERE username LIKE %s 
+            OR phone LIKE %s;
+            """, (f'%{pattern}%', f'%{pattern}%'))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
 
-def insert_from_console():
+def insert():
     print("Введите данные:")
     username = input()
     phone = input()
-    sql  = f'''INSERT INTO PhoneBook(username, phone) VALUES ('{username}', '{phone}'); '''
-    cursor.execute(sql)
+    sql  = f'''CALL insert_or_update_user(%s, %s)'''
+    cursor.execute(sql,(username,phone))
+
+def query_phonebook(limit, offset):
+    with connection.cursor() as cursor:
+        query = """
+        SELECT username, phone
+        FROM PhoneBook
+        ORDER BY username
+        LIMIT %s
+        OFFSET %s
+        """
+        cursor.execute(query, (limit, offset))
+
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
 
 def delete():
-    print("What's username do u want delete?")
-    user = input()
-    sql = f'''DELETE FROM PhoneBook WHERE username = '{user}';'''
+    print("What you want to delete?(1- username, 2-phone)")
+    whhh = input()
+    if whhh == "1":
+        user = input()
+        sql = f'''DELETE FROM PhoneBook WHERE username = '{user}';'''
+    elif whhh == "2":
+        phone = input()
+        sql = f'''DELETE FROM PhoneBook WHERE phone = '{phone}';'''
     cursor.execute(sql)
 
 def update():
@@ -64,11 +100,11 @@ def query():
         condition = None
     if condition:
         if select == "1":
-            sql = f'''SELECT * FROM PhoneBook WHERE username LIKE '{condition}';'''
+            sql = f'''SELECT * From phonebook WHERE username LIKE '{condition}';'''
         elif select == "2":
-            sql = f'''SELECT * FROM PhoneBook WHERE phone LIKE '{condition}';'''
+            sql = f'''SELECT * From phonebook WHERE phone LIKE '{condition}';'''
         else:
-            sql = f'''SELECT * FROM PhoneBook WHERE '{condition}';'''
+            sql = f'''SELECT * FROM PhoneBook WHERE {condition};'''
     else:
         if select == "1":
             sql = f'''SELECT username FROM PhoneBook;'''
@@ -81,19 +117,28 @@ def query():
     for row in answer:
         print(row)
 
-what = hello()
+command = user_command()
 
-if what == "C":
-    insert_from_console()
-elif what == "D":
+if command == "C":
+    insert()
+elif command == "D":
     delete()
-elif what == "U":
+elif command == "U":
     update()
-elif what == "Q":
+elif command == "Q":
     query()
+elif command == "P":
+    find_by_pattern(pattern)
+elif command == "PA":
+    print("What limit and offset?")
+    lim = int(input())
+    offset = int(input())
+    query_phonebook(lim, offset)
+
 
 connection.commit()
-print("Succes!")
+print("Success!")
+
 
 
 cursor.close()
